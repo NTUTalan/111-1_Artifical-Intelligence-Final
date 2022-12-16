@@ -3,7 +3,7 @@ import numpy as np
 import point as pt
 '''
 point => 中心座標
-direction => 方向 (8種 順時針, 編號0~7) 
+direction => 方向 
 以正方形來跑
 中心x座標+-10
 中心y座標+-10
@@ -21,24 +21,29 @@ def isMovable(point, direction, map):
     max_y = map.shape[0] - 1
     max_x = map.shape[1] - 1
     testPt = pt.Point(point)
-    Move(testPt, direction)
+    Move_8(testPt, direction)
     for i in range(-10, 11): 
         for j in range(-10, 11):
             # 是否在圓形內
-            if(pt.distance(testPt, pt.Point([testPt.x + i, testPt.y + j])) <= 10):
+            if(pt.distance(testPt, pt.Point([testPt.x + i, testPt.y + j])) < 10):
                 if(testPt.x + i < 0 or testPt.y + j < 0):
-                    print("index < 0")
                     return False
                 if(testPt.x + i > max_x or testPt.y + j > max_y):
-                    print("index out of range")
                     return False
                 if(map[testPt.x + i, testPt.y + j] == 1):
-                    print(testPt.x + i, testPt.y + j)
-                    print("is obstacle")
                     return False
     return True
 
-def Move(point, direction):
+def Move_4(point, direction):
+    result = pt.Point(point)
+    if(direction == 0): result.y += -1
+    elif(direction == 1): result.x += 1
+    elif(direction == 2): result.y += 1
+    elif(direction == 3): result.x += -1
+    else: raise Exception("Direction not defined")
+    return result
+
+def Move_8(point, direction):
     result = pt.Point(point)
     if(direction == 0): 
         result.y += -1
@@ -60,8 +65,7 @@ def Move(point, direction):
     elif(direction == 7):
         result.x += -1
         result.y += -1
-    else: 
-        raise Exception("Direction not defined")
+    else: raise Exception("Direction not defined")
     return result
 
 def solution(map):
@@ -74,29 +78,27 @@ def solution(map):
     while 1:
         print("Enter: ", end = "")
         print(currentPoint)
-
         '''
         加入已走過的點
         '''
-        if(len(opened) != 0):
-            currentPoint.costFromInit = currentPoint.parent.costFromInit + pt.distance(currentPoint, currentPoint.parent)
         opened.append(currentPoint) 
-
+        if(currentPoint in frontier):
+            frontier.remove(currentPoint)
         '''
         如果為解結束迴圈
         '''
         if(currentPoint == stopPoint):
+            print(currentPoint.costFromInit)
             break
 
         '''
         可行動的點
         '''
         test = [] 
-        print(isMovable(currentPoint, 3, map))
         # 測試8個方向
         for i in range(8):  
             if(isMovable(currentPoint, i, map)):
-                p = Move(currentPoint, i)
+                p = Move_8(currentPoint, i)
                 p.setParent(currentPoint)
                 test.append(p)
         # 測試是否已走過
@@ -108,17 +110,18 @@ def solution(map):
             if(test_point in test):
                 test.remove(test_point)
         frontier.extend(test)
-        print(frontier)
         '''
         判斷Cost, 進下個點
         '''
-        costList = []
-        for movable_pt in frontier:
-            costList.append(getCost(movable_pt, stopPoint))
-        next = frontier[costList.index(min(costList))]
+        costList = [getCost(movable_pt, stopPoint) for movable_pt in frontier]
+        next = frontier[costList.index(min(costList))]  
         currentPoint = next
+        currentPoint.costFromInit = currentPoint.parent.costFromInit + pt.distance(currentPoint, currentPoint.parent)
+        
 
-    print("在" + str(currentPoint) + "結束")
+
+
+    ("在" + str(currentPoint) + "結束")
     while(currentPoint.parent != None):
         map[currentPoint.x, currentPoint.y] = -1
         currentPoint = currentPoint.parent
