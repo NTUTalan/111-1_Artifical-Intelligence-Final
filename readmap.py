@@ -6,6 +6,7 @@ EMPTY_CELL = 0
 OBSTACLE_CELL = 1
 START_CELL = 2
 GOAL_CELL = 3
+
 white = np.array([255, 255, 255])
 black = np.array([0, 0, 0])
 red = np.array([36, 28, 237])
@@ -31,8 +32,8 @@ yellow = np.array([0, 242, 255])
       
 #     np.savetxt(os.path.splitext(map)[0]+'.csv', data, delimiter=',', fmt='%d')
 
-name = "test_map"
-img = cv2.imread(name + ".png", cv2.IMREAD_COLOR)
+name = "test_map2"
+img = cv2.imread(".\\ai_map\\" + name + ".png", cv2.IMREAD_COLOR)
 print(img.shape[0], img.shape[1])
 data = np.zeros([img.shape[1], img.shape[0]])
 for i in range(img.shape[1]):
@@ -46,4 +47,4 @@ for i in range(img.shape[1]):
     elif (img[i, j] == yellow).all():
       data[i, j] = GOAL_CELL
       
-np.savetxt(name +'.csv', data, delimiter=',', fmt='%d')
+np.savetxt(".\\ai_map\\" + name +'.csv', data, delimiter=',', fmt='%d')

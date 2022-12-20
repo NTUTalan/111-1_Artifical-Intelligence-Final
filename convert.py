@@ -7,7 +7,7 @@ red = np.array([237, 28, 36])
 yellow = np.array([255, 242, 0])
 blue = np.array([0, 0, 255])
 
-fileName = "big-easy"
+fileName = "small-hard"
 temp = np.loadtxt(".\\shortest\\" + fileName + "-path.csv", dtype = np.int, delimiter = ',')
 a = np.empty([temp.shape[0], temp.shape[1], 3], dtype = np.uint8)
 
