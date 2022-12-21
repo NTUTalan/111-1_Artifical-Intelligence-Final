@@ -47,7 +47,7 @@ def isMovable(point, direction, map):
     # j => y axis bias
     max_y = map.shape[0] - 1
     max_x = map.shape[1] - 1
-    testPt = Move_8(point, direction)
+    testPt = Move(point, direction)
     for i in range(-10, 11): 
         for j in range(-10, 11):
             # 是否在圓形內
@@ -60,7 +60,7 @@ def isMovable(point, direction, map):
                     return False
     return True
 
-def Move_8(point, direction):
+def Move(point, direction):
     result = pt.Point(point)
     if(direction == 0): 
         result.y += -1
@@ -90,25 +90,26 @@ def solution(map):
 
     frontier = list()
     opened = list()
+    costList = list()
 
     startPoint = pt.Point(np.where(map == 2))
     stopPoint = pt.Point(np.where(map == 3))
 
     currentPoint = startPoint # 指定Initial Node
     while 1:
-        print(currentPoint)
-        drawPath(currentPoint, map)
+        # print(currentPoint)
+        # drawPath(currentPoint, map)
         '''
-        加入已走過的點
+        加入已走過的點 & frontier刪除已走過的點
         '''
         opened.append(currentPoint)
         if(currentPoint in frontier):
+            del costList[frontier.index(currentPoint)]
             frontier.remove(currentPoint)
         '''
         如果為最解結束迴圈, 否則繼續進行
         '''
         if(currentPoint == stopPoint):
-            print(costList)
             print(currentPoint.costFromInit)
             break
         '''
@@ -118,17 +119,17 @@ def solution(map):
         # 測試8個方向
         for i in range(8):  
             if(isMovable(currentPoint, i, map)):
-                p = Move_8(currentPoint, i)
+                p = Move(currentPoint, i)
                 if(p in opened): continue # 測試是否已走過  
                 if(p in frontier): continue # 測試是否在frontier內
                 p.parent = currentPoint
                 p.costFromInit = currentPoint.costFromInit + pt.distance(p, currentPoint)       
                 test.append(p)
+        costList.extend([getCost(movable_pt, stopPoint) for movable_pt in test])
         frontier.extend(test)
         '''
         判斷Cost, 進下個點
         '''
-        costList = [getCost(movable_pt, stopPoint) for movable_pt in frontier]
         next = frontier[costList.index(min(costList))]
         currentPoint = next
 
@@ -144,4 +145,5 @@ if(__name__ == "__main__"):
     args = sys.argv[1:]
     mapName = args[0]
     mapFile = np.genfromtxt(".\\ai_map\\" + mapName + ".csv", delimiter=',')
+    print("Finding...")
     solution(mapFile)
