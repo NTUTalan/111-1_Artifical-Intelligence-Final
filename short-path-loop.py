@@ -94,7 +94,7 @@ def solution(map):
 
     startPoint = pt.Point(np.where(map == 2))
     stopPoint = pt.Point(np.where(map == 3))
-    print("distance(start, stop) = " + pt.distance(startPoint, stopPoint))
+    print("distance(start, stop) = " + str(pt.distance(startPoint, stopPoint)))
 
     currentPoint = startPoint # 指定Initial Node
     while 1:
