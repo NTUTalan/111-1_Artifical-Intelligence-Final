@@ -1,6 +1,6 @@
 # 路徑規劃
 ## 資料夾說明
-ai_map: 存地圖的地方
+ai_map: 存地圖的地方  
 solutions: 存結果的地方，有Astar跟Greedy
 ## 各個Python檔使用說明
 - readmap.py  
