@@ -1,1 +1,4 @@
-shortest/
+solutions/
+.vs/
+__pycache__/
+.gitattributes
