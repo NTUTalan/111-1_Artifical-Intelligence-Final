@@ -19,25 +19,6 @@ def printResultTime(time):
     sec = ((time % 3600) // 60) % 60
     print("執行時間: %d小時 %d分 %d秒" % (hour, min, sec))
 
-def drawPath(point, map):
-    '''
-    畫圖的小函式
-    '''
-    global name 
-    temp = np.copy(map)
-    n = 0
-    while(point.parent != None):
-        temp[point.x, point.y] = 127
-        point = point.parent
-        n += 1
-    for i in range(0, len(temp)):
-        for j in range(0,len(temp[i])):
-            if temp[i, j] == 1: temp[i, j] = 0
-            elif temp[i, j] == 0: temp[i, j] = 255      
-    img = Image.fromarray(temp).convert("L")
-    img.save('..\\moving_path\\' + mapName + "\\" + str(name) + '.png')
-    name += 1
-    
 def getCost(now, stop):
     return pt.distance(now, stop)
            
@@ -98,8 +79,6 @@ def solution(map):
 
     currentPoint = startPoint # 指定Initial Node
     while 1:
-        # print(currentPoint)
-        # drawPath(currentPoint, map)
         '''
         加入已走過的點 & frontier刪除已走過的點
         '''
@@ -107,12 +86,16 @@ def solution(map):
         if(currentPoint in frontier):
             del costList[frontier.index(currentPoint)]
             frontier.remove(currentPoint)
+
+
         '''
-        如果為最解結束迴圈, 否則繼續進行
+        如果為解結束迴圈
         '''
         if(currentPoint == stopPoint):
             print(currentPoint.costFromInit)
             break
+
+
         '''
         可行動的點
         '''
@@ -128,6 +111,8 @@ def solution(map):
                 test.append(p)
         costList.extend([getCost(movable_pt, stopPoint) for movable_pt in test])
         frontier.extend(test)
+
+        
         '''
         判斷Cost, 進下個點
         '''
@@ -140,7 +125,7 @@ def solution(map):
     while(currentPoint.parent != None):
         map[currentPoint.x, currentPoint.y] = -1
         currentPoint = currentPoint.parent
-    np.savetxt('.\\shortest\\Greedy\\' + mapName + "_solution.csv", map, delimiter = ",")
+    np.savetxt('.\\solutions\\Greedy\\' + mapName + "_solution.csv", map, delimiter = ",")
 
 if(__name__ == "__main__"):
     args = sys.argv[1:]
@@ -148,3 +133,4 @@ if(__name__ == "__main__"):
     mapFile = np.genfromtxt(".\\ai_map\\" + mapName + ".csv", delimiter=',')
     print("Finding...")
     solution(mapFile)
+    print(mapName)
