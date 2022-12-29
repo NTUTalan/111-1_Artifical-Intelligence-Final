@@ -1,7 +1,5 @@
-solutions/Astar/*.csv
-solutions/Astar/*.png
-solutions/Greedy/*.csv
-solutions/Greedy/*.png
+solutions/*.csv
+solutions/*.png
 .vs/
 __pycache__/
 .gitattributes
