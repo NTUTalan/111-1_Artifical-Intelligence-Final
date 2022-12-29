@@ -1,4 +1,5 @@
-solutions/
+solutions/Astar/
+solutions/Greedy/
 .vs/
 __pycache__/
 .gitattributes
