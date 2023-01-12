@@ -92,7 +92,8 @@ def solution(map):
         如果為解結束迴圈
         '''
         if(currentPoint == stopPoint):
-            print(currentPoint.costFromInit)
+            print("分數: ", end = '')
+            print(pt.distance(startPoint, stopPoint) / currentPoint.costFromInit)
             break
 
 
@@ -121,7 +122,6 @@ def solution(map):
 
     endTime = time.time()    
     printResultTime(endTime - startTime)
-    ("在" + str(currentPoint) + "結束")
     while(currentPoint.parent != None):
         map[currentPoint.x, currentPoint.y] = -1
         currentPoint = currentPoint.parent
